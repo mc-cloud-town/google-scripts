@@ -1,0 +1,10 @@
+{
+  "name": "google-scripts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "a3510377 <a102009102009@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/google-apps-script": "^1.0.78"
+  }
+}
