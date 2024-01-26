@@ -1,6 +1,7 @@
 const properties = PropertiesService.getScriptProperties();
 
 const DISCORD_WEBHOOK_URL = properties.getProperty('DISCORD_WEBHOOK_URL');
+const BOT_TOKEN = properties.getProperty('BOT_TOKEN');
 
 export const onFormSubmit = ({
   range,
@@ -26,29 +27,43 @@ export const onFormSubmit = ({
   console.log(JSON.stringify(data));
 
   if (DISCORD_WEBHOOK_URL) {
-    UrlFetchApp.fetch(DISCORD_WEBHOOK_URL, {
-      method: 'post',
-      payload: JSON.stringify({
-        embeds: [
-          {
-            title: `收到一份新的表單 #${data.ID}`,
-            color: 0xffa600,
-            fields: [
-              { name: 'discordID', value: data.discordID, inline: true },
-              { name: '國籍', value: data.nationality, inline: true },
-              { name: '基礎分數', value: data.score, inline: true },
-              { name: '申請類別', value: data.category, inline: true },
-              {
-                name: '自我介紹',
-                value: stringSizeRange(data.introduce || '無'),
-                inline: true,
-              },
-            ],
-          },
-        ],
-      }),
-      contentType: 'application/json',
-    });
+    const url = new URL(DISCORD_WEBHOOK_URL);
+    url.searchParams.append('wait', 'true');
+    const msg = JSON.parse(
+      UrlFetchApp.fetch(url.href, {
+        method: 'post',
+        payload: JSON.stringify({
+          embeds: [
+            {
+              title: `收到一份新的表單 #${data.ID}`,
+              color: 0xffa600,
+              fields: [
+                { name: 'discordID', value: data.discordID, inline: true },
+                { name: '國籍', value: data.nationality, inline: true },
+                { name: '基礎分數', value: data.score, inline: true },
+                { name: '申請類別', value: data.category, inline: true },
+                {
+                  name: '自我介紹',
+                  value: stringSizeRange(data.introduce || '無'),
+                  inline: true,
+                },
+              ],
+            },
+          ],
+        }),
+        contentType: 'application/json',
+      }).getContentText()
+    );
+
+    if (BOT_TOKEN) {
+      const baseURL = `https://discord.com/api/channels/${msg.channel_id}/messages/${msg.id}/reactions`;
+      UrlFetchApp.fetch(`${baseURL}/⭕/@me`, {
+        headers: { Authorization: `Bot ${BOT_TOKEN}` },
+      });
+      UrlFetchApp.fetch(`${baseURL}/❌/@me`, {
+        headers: { Authorization: `Bot ${BOT_TOKEN}` },
+      });
+    }
   }
 };
 
