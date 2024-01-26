@@ -56,11 +56,14 @@ export const onFormSubmit = ({
     );
 
     if (BOT_TOKEN) {
+      // Add reactions, `O` and `X`
       const baseURL = `https://discord.com/api/channels/${msg.channel_id}/messages/${msg.id}/reactions`;
       UrlFetchApp.fetch(`${baseURL}/⭕/@me`, {
+        method: 'put',
         headers: { Authorization: `Bot ${BOT_TOKEN}` },
       });
       UrlFetchApp.fetch(`${baseURL}/❌/@me`, {
+        method: 'put',
         headers: { Authorization: `Bot ${BOT_TOKEN}` },
       });
     }
