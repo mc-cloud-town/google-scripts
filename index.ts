@@ -1,7 +1,7 @@
 const properties = PropertiesService.getScriptProperties();
 
 const DISCORD_WEBHOOK_URL = properties.getProperty('DISCORD_WEBHOOK_URL');
-const BOT_TOKEN = properties.getProperty('BOT_TOKEN');
+// const BOT_TOKEN = properties.getProperty('BOT_TOKEN');
 
 export const onFormSubmit = ({
   range,
@@ -24,13 +24,9 @@ export const onFormSubmit = ({
     ID: range.getRowIndex() - 1,
   };
 
-  console.log(JSON.stringify(data));
-
   if (DISCORD_WEBHOOK_URL) {
-    const url = new URL(DISCORD_WEBHOOK_URL);
-    url.searchParams.append('wait', 'true');
     const msg = JSON.parse(
-      UrlFetchApp.fetch(url.href, {
+      UrlFetchApp.fetch(DISCORD_WEBHOOK_URL, {
         method: 'post',
         payload: JSON.stringify({
           embeds: [
@@ -55,18 +51,19 @@ export const onFormSubmit = ({
       }).getContentText()
     );
 
-    if (BOT_TOKEN) {
-      // Add reactions, `O` and `X`
-      const baseURL = `https://discord.com/api/channels/${msg.channel_id}/messages/${msg.id}/reactions`;
-      UrlFetchApp.fetch(`${baseURL}/⭕/@me`, {
-        method: 'put',
-        headers: { Authorization: `Bot ${BOT_TOKEN}` },
-      });
-      UrlFetchApp.fetch(`${baseURL}/❌/@me`, {
-        method: 'put',
-        headers: { Authorization: `Bot ${BOT_TOKEN}` },
-      });
-    }
+    // 403 -> 40333 error, app script system ip Not allowed
+    // if (BOT_TOKEN) {
+    //   // Add reactions, `O` and `X`
+    //   const baseURL = `https://discord.com/api/channels/${msg.channel_id}/messages/${msg.id}/reactions`;
+    //   UrlFetchApp.fetch(`${baseURL}/⭕/@me`, {
+    //     method: 'put',
+    //     headers: { Authorization: `Bot ${BOT_TOKEN}` },
+    //   });
+    //   UrlFetchApp.fetch(`${baseURL}/❌/@me`, {
+    //     method: 'put',
+    //     headers: { Authorization: `Bot ${BOT_TOKEN}` },
+    //   });
+    // }
   }
 };
 
