@@ -25,31 +25,29 @@ export const onFormSubmit = ({
   };
 
   if (DISCORD_WEBHOOK_URL) {
-    const msg = JSON.parse(
-      UrlFetchApp.fetch(DISCORD_WEBHOOK_URL, {
-        method: 'post',
-        payload: JSON.stringify({
-          embeds: [
-            {
-              title: `收到一份新的表單 #${data.ID}`,
-              color: 0xffa600,
-              fields: [
-                { name: 'discordID', value: data.discordID, inline: true },
-                { name: '國籍', value: data.nationality, inline: true },
-                { name: '基礎分數', value: data.score, inline: true },
-                { name: '申請類別', value: data.category, inline: true },
-                {
-                  name: '自我介紹',
-                  value: stringSizeRange(data.introduce || '無'),
-                  inline: true,
-                },
-              ],
-            },
-          ],
-        }),
-        contentType: 'application/json',
-      }).getContentText()
-    );
+    UrlFetchApp.fetch(DISCORD_WEBHOOK_URL, {
+      method: 'post',
+      payload: JSON.stringify({
+        embeds: [
+          {
+            title: `收到一份新的表單 #${data.ID}`,
+            color: 0xffa600,
+            fields: [
+              { name: 'discordID', value: data.discordID, inline: true },
+              { name: '國籍', value: data.nationality, inline: true },
+              { name: '基礎分數', value: data.score, inline: true },
+              { name: '申請類別', value: data.category, inline: true },
+              {
+                name: '自我介紹',
+                value: stringSizeRange(data.introduce || '無'),
+                inline: true,
+              },
+            ],
+          },
+        ],
+      }),
+      contentType: 'application/json',
+    });
 
     // 403 -> 40333 error, app script system ip Not allowed
     // if (BOT_TOKEN) {
