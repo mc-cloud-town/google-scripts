@@ -29,6 +29,8 @@ export const onFormSubmit = ({
     ID: range.getRowIndex() - 1,
   };
 
+  const [, score] = data.score?.match(/(\d+) \/ \d+/) || [];
+
   if (DISCORD_WEBHOOK_URL) {
     UrlFetchApp.fetch(DISCORD_WEBHOOK_URL, {
       method: 'post',
@@ -40,7 +42,7 @@ export const onFormSubmit = ({
             fields: [
               { name: 'discordID', value: data.discordID, inline: true },
               { name: '國籍', value: data.nationality, inline: true },
-              { name: '基礎分數', value: data.score, inline: true },
+              { name: '基礎分數', value: Math.min(+score, 100), inline: true },
               { name: '申請類別', value: data.category, inline: true },
               { name: '年齡', value: data.arg, inline: true },
               { name: '性別', value: data.gender, inline: true },
