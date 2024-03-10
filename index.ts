@@ -14,11 +14,16 @@ export const onFormSubmit = ({
       namedValues[
         '請給我一段自我介紹。\nPlease shortly introduce yourself?'
       ].shift(),
+    arg: namedValues['請問您的年紀？\nHow old are you?'].shift(),
+    gender:
+      namedValues['請問您的性別？\nWhat is your preferred pronoun?'].shift(),
+    minecraftID:
+      namedValues['請問您的minecraft ID？\nWhat is your minecraft ID?'].shift(),
     nationality:
       namedValues['請問您的國籍為何？\nWhat is your nationality?'].shift(),
     category:
       namedValues[
-        '請問想報考的組別？(選擇將會影響考題)\nWhich category are you applying? (Choices will affect questions you get)'
+        '請問想報考的組別與語言？(選擇將會影響考題)\nWhich category and language are you applying? (Choices will affect questions you get)'
       ].shift(),
     score: namedValues['分數'].shift(),
     ID: range.getRowIndex() - 1,
@@ -37,6 +42,9 @@ export const onFormSubmit = ({
               { name: '國籍', value: data.nationality, inline: true },
               { name: '基礎分數', value: data.score, inline: true },
               { name: '申請類別', value: data.category, inline: true },
+              { name: '年齡', value: data.arg, inline: true },
+              { name: '性別', value: data.gender, inline: true },
+              { name: 'Minecraft ID', value: data.minecraftID, inline: true },
               {
                 name: '自我介紹',
                 value: stringSizeRange(data.introduce || '無'),
@@ -68,8 +76,11 @@ export const onFormSubmit = ({
 export interface IFormData {
   '請問您的discord ID？\nWhat is your discord ID?': [string];
   '請給我一段自我介紹。\nPlease shortly introduce yourself?': [string];
+  '請問您的年紀？\nHow old are you?': [string];
+  '請問您的性別？\nWhat is your preferred pronoun?': [string];
+  '請問您的minecraft ID？\nWhat is your minecraft ID?': [string];
   '請問您的國籍為何？\nWhat is your nationality?': [string];
-  '請問想報考的組別？(選擇將會影響考題)\nWhich category are you applying? (Choices will affect questions you get)': [
+  '請問想報考的組別與語言？(選擇將會影響考題)\nWhich category and language are you applying? (Choices will affect questions you get)': [
     string
   ];
   分數: [string];
