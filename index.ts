@@ -26,7 +26,7 @@ export const onFormSubmit = ({
         '請問想報考的組別與語言？(選擇將會影響考題)\nWhich category and language are you applying? (Choices will affect questions you get)'
       ].shift(),
     score: namedValues['分數'].shift(),
-    ID: range.getRowIndex() - 1,
+    ID: range.getRowIndex() - 3,
   };
 
   const [, score] = data.score?.match(/(\d+) \/ \d+/) || [];
